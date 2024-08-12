@@ -37,8 +37,9 @@ def main(config):
 
 
     # Run the model to get the hidden states
-    print("Getting the hidden states from source...")
-    model(source_inputs)
+    print("Can the model retrieve the correct attribute...")
+    validity_check = model(source_inputs)
+    print(validity_check.logits[0, -1].argsort().flip(0).tolist().index(target_tk))
 
     # Remove the hooks
     for hook in hooks:
@@ -112,9 +113,9 @@ def main(config):
 config = {
     "exp_name": "red",
     "model_name": "google/gemma-2-9b",
-    "source_input": "A red mouse and a blue cat went to the market.",
+    "source_input": "<Context> A red mouse and a blue cat went to the market. </Context> The color of the mouse is",
     "target_input": "banana:yellow, apple:red, grass:green, sky:blue, x:",
-    "pos": 3
+    "pos": 6
 }
 
 if __name__ == "__main__":
